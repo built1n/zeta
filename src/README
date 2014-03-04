@@ -1,2 +1,0 @@
-Zeta is a CISC emulator with a tiny instruction set (11 main instructions).
-The emulator is written in C, with a C++ frontend. 
