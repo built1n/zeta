@@ -163,7 +163,6 @@ inline void zeta_exec_0B(word arg, zeta_ctx* ctx)
 void(*exec_table[256])(word, zeta_ctx*)={&zeta_exec_00, &zeta_exec_01, &zeta_exec_02, &zeta_exec_03, &zeta_exec_04, &zeta_exec_05, &zeta_exec_06, &zeta_exec_07, &zeta_exec_08, &zeta_exec_09, &zeta_exec_0A, &zeta_exec_0B};
 void exec_opcode(byte opcode, word arg, zeta_ctx* ctx)
 {
-  printf("Executing opcode 0x%x\n", opcode);
   if(!ctx->done)
     {
       if(exec_table[opcode])
