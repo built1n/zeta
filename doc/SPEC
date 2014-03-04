@@ -27,6 +27,7 @@ Bit 7 of the extended instruction specifier specifies whether to treat the argum
 Set = pointer, not set = explicit value
 
 Extended instruction set:
+0x00 - LOADX
 0x01 - OR
 0x02 - NOT
 0x03 - AND

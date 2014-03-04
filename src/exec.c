@@ -67,6 +67,9 @@ inline void exec_extd(zeta_ctx* ctx, byte opcode, word arg)
     case 0x09:
       --(ctx->regs.accl);
       break;
+    case 0x00:
+      ctx->regs.accl=arg;
+      break;
     case 0x01:
       ctx->regs.accl|=operand;
       break;
