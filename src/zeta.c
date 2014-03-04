@@ -48,9 +48,15 @@ word getArg (zeta_ctx* ctx)
 }
 void zeta_exec (zeta_ctx* ctx)
 {
-  byte opcode = ctx->memory[ctx->regs.pc];
-  word arg=getArg(ctx);
-  exec_opcode(opcode, arg, ctx);
-  ctx->regs.pc+=5; // extended opcodes will automatically add one
+  if(ctx->regs.pc<ctx->memsize-5)
+    {
+      byte opcode = ctx->memory[ctx->regs.pc];
+      word arg=getArg(ctx);
+      exec_opcode(opcode, arg, ctx);
+      ctx->regs.pc+=5; // extended opcodes will automatically add one
+    }
+  else
+    {
+      ctx->done=true;
+    }
 }
- 
