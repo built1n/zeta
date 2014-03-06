@@ -39,12 +39,17 @@ zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp)
 }
 word getArg (zeta_ctx* ctx)
 {
-  register word pc = ctx->regs.pc;
-  register word ret = ctx->memory[pc + 1];
-  ret |= ctx->memory[pc + 2];
-  ret |= ctx->memory[pc + 3];
-  ret |= ctx->memory[pc + 4];
-  return ret;
+  if(ctx->regs.pc<ctx->memsize-4)
+    {
+      register word pc = ctx->regs.pc;
+      register word ret = ctx->memory[pc + 1];
+      ret |= ctx->memory[pc + 2];
+      ret |= ctx->memory[pc + 3];
+      ret |= ctx->memory[pc + 4];
+      return ret;
+    }
+  else
+    badRead(ctx);
 }
 void zeta_exec (zeta_ctx* ctx)
 {
@@ -52,7 +57,7 @@ void zeta_exec (zeta_ctx* ctx)
     {
       byte opcode = ctx->memory[ctx->regs.pc];
       word arg=getArg(ctx);
-      exec_opcode(opcode, arg, ctx);
+      exec_instr(opcode, arg, ctx);
       ctx->regs.pc+=5; // extended opcodes will automatically add one
     }
   else
