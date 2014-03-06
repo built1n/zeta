@@ -40,3 +40,8 @@ Extended instruction set:
 0x09 - DECR
  - Argument ignored
 0x0A - HLT
+0x0B - PRINT [unimplemented]
+ - Print accumulator contents in decimal
+ - Argument ignored
+0x0C - PUTS [unimplemented]
+ - Print zero-terminated string specified by argument
