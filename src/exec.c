@@ -2,7 +2,7 @@
 #include <exec.h>
 #include <util.h>
 #include <stdlib.h>
-static inline void writeWord(zeta_ctx* ctx, word addr, word value)
+static void writeWord(zeta_ctx* ctx, word addr, word value)
 {
   if(addr<ctx->memsize-4)
     {
@@ -14,7 +14,7 @@ static inline void writeWord(zeta_ctx* ctx, word addr, word value)
   else
     badWrite(ctx);
 }
-static inline word readWord(zeta_ctx* ctx, word addr)
+static word readWord(zeta_ctx* ctx, word addr)
 {
   word ret=0;
   if(addr<ctx->memsize-4)
@@ -28,7 +28,7 @@ static inline word readWord(zeta_ctx* ctx, word addr)
     badRead(ctx);
   return ret;
 }
-static inline void pushStack(zeta_ctx* ctx, word value)
+static void pushStack(zeta_ctx* ctx, word value)
 {
   if(ctx->stacksize<=ctx->maxstacksize-4)
     {
@@ -39,7 +39,7 @@ static inline void pushStack(zeta_ctx* ctx, word value)
   else
     stackOverflow(ctx);
 }
-static inline word popStack(zeta_ctx* ctx)
+static word popStack(zeta_ctx* ctx)
 {
   if(ctx->stacksize>=4)
     {
@@ -51,7 +51,7 @@ static inline word popStack(zeta_ctx* ctx)
   else
     stackUnderflow(ctx);
 }
-inline void exec_extd(zeta_ctx* ctx, byte opcode, word arg)
+static void exec_extd(zeta_ctx* ctx, byte opcode, word arg)
 {
   word operand=arg; // explicit value
   if(opcode&0x80) // bit 7 set, treat as pointer
@@ -97,23 +97,23 @@ inline void exec_extd(zeta_ctx* ctx, byte opcode, word arg)
       break;
     }
 }
-inline void zeta_exec_00(word arg, zeta_ctx* ctx)
+static void zeta_exec_00(word arg, zeta_ctx* ctx)
 {
   asm("nop");
 }
-inline void zeta_exec_01(word arg, zeta_ctx* ctx)
+static void zeta_exec_01(word arg, zeta_ctx* ctx)
 {
   writeWord(ctx, arg, ctx->regs.accl);
 }
-inline void zeta_exec_02(word arg, zeta_ctx* ctx)
+static void zeta_exec_02(word arg, zeta_ctx* ctx)
 {
   ctx->regs.accl=readWord(ctx, arg);
 }
-inline void zeta_exec_03(word arg, zeta_ctx* ctx)
+static void zeta_exec_03(word arg, zeta_ctx* ctx)
 {
   ctx->regs.pc=arg-5;
 }
-inline void zeta_exec_04(word arg, zeta_ctx* ctx)
+static void zeta_exec_04(word arg, zeta_ctx* ctx)
 {
   --(ctx->regs.accl);
   if(ctx->regs.accl==arg)
@@ -125,7 +125,7 @@ inline void zeta_exec_04(word arg, zeta_ctx* ctx)
       ctx->regs.pc+=add;
     }
 }
-inline void zeta_exec_05(word arg, zeta_ctx* ctx)
+static void zeta_exec_05(word arg, zeta_ctx* ctx)
 {
   if(ctx->regs.accl==arg)
     {
@@ -136,35 +136,35 @@ inline void zeta_exec_05(word arg, zeta_ctx* ctx)
       ctx->regs.pc+=add;
     }
 }
-inline void zeta_exec_06(word arg, zeta_ctx* ctx)
+static void zeta_exec_06(word arg, zeta_ctx* ctx)
 {
   pushStack(ctx, ctx->regs.pc);
   ctx->regs.pc=arg-5;
 }
-inline void zeta_exec_07(word arg, zeta_ctx* ctx)
+static void zeta_exec_07(word arg, zeta_ctx* ctx)
 {
   ctx->regs.pc=popStack(ctx); // no need to add five, zeta_exec does for us
 }
-inline void zeta_exec_08(word arg, zeta_ctx* ctx)
+static void zeta_exec_08(word arg, zeta_ctx* ctx)
 {
   pushStack(ctx, ctx->regs.accl);
 }
-inline void zeta_exec_09(word arg, zeta_ctx* ctx)
+static void zeta_exec_09(word arg, zeta_ctx* ctx)
 {
   pushStack(ctx, arg);
 }
-inline void zeta_exec_0A(word arg, zeta_ctx* ctx)
+ void zeta_exec_0A(word arg, zeta_ctx* ctx)
 {
   ctx->regs.accl=popStack(ctx);
 }
-inline void zeta_exec_0B(word arg, zeta_ctx* ctx)
+static void zeta_exec_0B(word arg, zeta_ctx* ctx)
 {
   // extended opcode
   ++ctx->regs.pc;
   exec_extd(ctx, ctx->memory[ctx->regs.pc], getArg(ctx));
 }
 void(*exec_table[256])(word, zeta_ctx*)={&zeta_exec_00, &zeta_exec_01, &zeta_exec_02, &zeta_exec_03, &zeta_exec_04, &zeta_exec_05, &zeta_exec_06, &zeta_exec_07, &zeta_exec_08, &zeta_exec_09, &zeta_exec_0A, &zeta_exec_0B};
-void exec_opcode(byte opcode, word arg, zeta_ctx* ctx)
+void exec_instr(byte opcode, word arg, zeta_ctx* ctx)
 {
   if(!ctx->done)
     {
