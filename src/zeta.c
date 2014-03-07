@@ -35,6 +35,7 @@ zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp)
   ctx->regs.pc=0;
   ctx->regs.accl=rand(); // give a random seed
   ctx->done=false;
+  ctx->return_value=EXIT_SUCCESS;
   return ctx;
 }
 word getArg (zeta_ctx* ctx)
