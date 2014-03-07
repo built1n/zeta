@@ -3,7 +3,7 @@
 #include <util.h>
 #include <stdlib.h>
 #include <stdio.h>
-void writeWord(zeta_ctx* ctx, word addr, word value)
+static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
   if(likely(addr<ctx->memsize-4))
     {
@@ -15,7 +15,7 @@ void writeWord(zeta_ctx* ctx, word addr, word value)
   else
     badWrite(ctx);
 }
-word readWord(zeta_ctx* ctx, word addr)
+static inline word readWord(zeta_ctx* ctx, word addr)
 {
   word ret=0;
   if(likely(addr<(ctx->memsize)-4))
@@ -29,7 +29,7 @@ word readWord(zeta_ctx* ctx, word addr)
     badRead(ctx);
   return ret;
 }
-void pushStack(zeta_ctx* ctx, word value)
+static inline void pushStack(zeta_ctx* ctx, word value)
 {
   if(likely((ctx->stacksize)<=(ctx->maxstacksize)-4))
     {
@@ -40,7 +40,7 @@ void pushStack(zeta_ctx* ctx, word value)
   else
     stackOverflow(ctx);
 }
-word popStack(zeta_ctx* ctx)
+static inline word popStack(zeta_ctx* ctx)
 {
   if(likely(ctx->stacksize>=4))
     {
@@ -52,14 +52,13 @@ word popStack(zeta_ctx* ctx)
   else
     stackUnderflow(ctx);
 }
-void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
+static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 {
   word arg=operand; // explicit value
   if(opcode&0x80) // bit 7 set, treat as pointer
     {
       arg=readWord(ctx, operand);
     }
-  printf("Executing extended opcode 0x%2X with argument %u\n", opcode, arg);
   switch(opcode&0x7F)
     {
     case 0x08: // let increment/decrement be fastest
@@ -117,11 +116,24 @@ void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 	  break;
 	}
       break;
+    case 0x0C: // puts
+      {
+	word loc=arg;
+	if(unlikely(operand&0x80))
+	  {
+	    loc=ctx->regs.accl;
+	  }
+	for(word i=loc;ctx->memory[i] && i<ctx->memsize;++i)
+	  {
+	    printChar(ctx->memory[i]);
+	  }
+	break;
+      }
     default:
       badInstr(ctx);
     }
 }
-void zeta_exec_00(word arg, zeta_ctx* ctx)
+static inline void zeta_exec_00(word arg, zeta_ctx* ctx)
 {
   asm("nop");
 }
@@ -189,7 +201,6 @@ void zeta_exec_0B(word arg, zeta_ctx* ctx)
 void(*exec_table[256])(word, zeta_ctx*)={&zeta_exec_00, &zeta_exec_01, &zeta_exec_02, &zeta_exec_03, &zeta_exec_04, &zeta_exec_05, &zeta_exec_06, &zeta_exec_07, &zeta_exec_08, &zeta_exec_09, &zeta_exec_0A, &zeta_exec_0B};
 void exec_instr(byte opcode, word arg, zeta_ctx* ctx)
 {
-  printf("Executing opcode 0x%X with arg %u\n", opcode, arg);
   if(!ctx->done)
     {
       if(exec_table[opcode])
