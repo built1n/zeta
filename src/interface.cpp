@@ -33,4 +33,5 @@ int main()
   zeta_ctx* ctx=zeta_init((byte*)p, program.size()+2048,2048,program.size());
   while(!ctx->done)
     zeta_exec(ctx);
+  return ctx->return_value;
 }

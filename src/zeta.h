@@ -10,9 +10,9 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
+
 typedef uint8_t byte;
 typedef uint32_t word;
-typedef uint32_t ptr;
 typedef struct zeta_regs {
   word accl, pc, sp;
 } zeta_regs;
@@ -22,13 +22,17 @@ typedef struct zeta_ctx {
   word stacksize;
   zeta_regs regs;
   bool done;
+  int return_value;
 } zeta_ctx;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp);
 void zeta_exec(zeta_ctx* ctx);
+
 #ifdef __cplusplus
 }
 #endif
+
 #endif /* ZETA_H_ */

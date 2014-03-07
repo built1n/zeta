@@ -94,6 +94,7 @@ static void exec_extd(zeta_ctx* ctx, byte opcode, word arg)
     case 0x0A:
       // halt
       ctx->done=true;
+      ctx->return_value=arg;
       break;
     }
 }
