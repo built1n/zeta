@@ -61,7 +61,6 @@ word getArg (zeta_ctx* ctx)
       ret |= (((ctx->memory)[pc + 3])<<8);
       ret |= (((ctx->memory)[pc + 2])<<16);
       ret |= (((ctx->memory)[pc + 1])<<24);
-      printf("getArg() returing 0x%8X\n", ret);
       return ret;
     }
   else
