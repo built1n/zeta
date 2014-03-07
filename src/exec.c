@@ -7,9 +7,9 @@ static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
   if(likely(addr<ctx->memsize-4))
     {
-      ctx->memory[addr+0]=(value&0xFF000000);
-      ctx->memory[addr+1]=(value&0x00FF0000);
-      ctx->memory[addr+2]=(value&0x0000FF00);
+      ctx->memory[addr+0]=((value&0xFF000000)>>24);
+      ctx->memory[addr+1]=((value&0x00FF0000)>>16);
+      ctx->memory[addr+2]=((value&0x0000FF00)>>8);
       ctx->memory[addr+3]=(value&0x000000FF);
     }
   else
