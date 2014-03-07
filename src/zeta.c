@@ -9,6 +9,20 @@
 #include <exec.h>
 #include <stdio.h>
 #include <stdlib.h>
+void printBinary(uint32_t n)
+{
+  for(int i=0;i<32;++i)
+    {
+      if((((n>>i)&1))==1)
+	printChar('1');
+      else
+	printChar('0');
+    }
+}
+void badInstr(zeta_ctx* ctx)
+{
+  printf("Bad instruction at 0x%8X!\n", ctx->regs.pc);
+}
 void badWrite(zeta_ctx* ctx)
 {
   printf("Bad memory write!\n");
@@ -42,11 +56,12 @@ word getArg (zeta_ctx* ctx)
 {
   if(ctx->regs.pc<ctx->memsize-4)
     {
-      register word pc = ctx->regs.pc;
-      register word ret = ctx->memory[pc + 1];
-      ret |= ctx->memory[pc + 2];
-      ret |= ctx->memory[pc + 3];
-      ret |= ctx->memory[pc + 4];
+      register word pc = (ctx->regs).pc;
+      register word ret = (ctx->memory)[pc + 4];
+      ret |= (((ctx->memory)[pc + 3])<<8);
+      ret |= (((ctx->memory)[pc + 2])<<16);
+      ret |= (((ctx->memory)[pc + 1])<<24);
+      printf("getArg() returing 0x%8X\n", ret);
       return ret;
     }
   else
