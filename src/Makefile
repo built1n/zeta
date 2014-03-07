@@ -1,5 +1,5 @@
 SOURCES=zeta.o exec.o interface.o
-CFLAGS=-I. -fPIC -g -std=gnu99 -O3 -g
+CFLAGS=-I. -fPIC -g -std=gnu11 -O3 -g
 CXXFLAGS=-I. -fPIC -fpermissive -g
 zeta: $(SOURCES)
 	gcc $(SOURCES) -o zeta -lstdc++ -g
