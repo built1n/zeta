@@ -13,6 +13,7 @@
 
 typedef uint8_t byte;
 typedef uint32_t word;
+
 typedef struct zeta_regs {
   word accl, pc, sp;
 } zeta_regs;
@@ -29,7 +30,7 @@ typedef struct zeta_ctx {
 extern "C" {
 #endif
 zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp);
-void zeta_exec(zeta_ctx* ctx);
+void zeta_exec(zeta_ctx*);
 
 #ifdef __cplusplus
 }
