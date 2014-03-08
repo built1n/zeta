@@ -44,7 +44,7 @@ int main()
 	    {
 	      if(toupper(oneByte[1])==hex_chars[j])
 		{
-		  val|=(j<<4);
+		  val|=((j&0xF)<<4);
 		  good=true;
 		}
 	    }
