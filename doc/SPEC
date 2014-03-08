@@ -51,7 +51,7 @@ Extended instruction set:
    - Uppercase hex, no "0X"
  - Argument = 4
    - Binary
-0x0C - PUTS [unimplemented]
+0x0C - PUTS
  - Print zero-terminated string specified by argument
  - If 7th bit is set, location is specified by accumulator
 0x0D - DBG [unimplemented]
@@ -61,3 +61,4 @@ Extended instruction set:
    Argument: 0x????????
    Accumulator: 0x????????
  - Values printed are those AFTER execution
+
