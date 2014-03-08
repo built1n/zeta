@@ -3,6 +3,19 @@
 #include <util.h>
 #include <stdlib.h>
 #include <stdio.h>
+static inline void printDebugMessage(zeta_ctx* ctx, byte opcode, word arg)
+{
+  printf("[0x%8X]\n",ctx->regs.pc);
+  printf("Accl: 0x%8X\n", ctx->regs.accl);
+  printf("Opcode: 0x%2X\n", opcode);
+  if(opcode==0x0B)
+    {
+      printf("Extended opcode: 0x%2X\n", ((arg&0xFF000000)>>24));
+      printf("Extended argument: 0x%8X\n", getArg(ctx));
+    }
+  else
+    printf("Argument: 0x%8X\n", arg);
+} 
 static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
   if(likely(addr<ctx->memsize-4))
@@ -129,6 +142,9 @@ static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 	  }
 	break;
       }
+    case 0x0D:
+      ctx->debug=!(ctx->debug);
+      break;
     default:
       badInstr(ctx);
     }
@@ -203,6 +219,10 @@ void exec_instr(byte opcode, word arg, zeta_ctx* ctx)
 {
   if(!ctx->done)
     {
+      if(unlikely(ctx->debug))
+	{
+	  printDebugMessage(ctx, opcode, arg);
+	}
       if(exec_table[opcode])
 	exec_table[opcode](arg, ctx);
     }
