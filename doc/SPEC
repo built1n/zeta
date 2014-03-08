@@ -40,6 +40,7 @@ Extended instruction set:
 0x09 - DECR
  - Argument ignored
 0x0A - HLT
+ - Return the argument as a signed integer
 0x0B - PRINT
  - Print accumulator contents
  - Argument = 0
@@ -52,3 +53,11 @@ Extended instruction set:
    - Binary
 0x0C - PUTS [unimplemented]
  - Print zero-terminated string specified by argument
+ - If 7th bit is set, location is specified by accumulator
+0x0D - DBG [unimplemented]
+ - Toggle debug mode
+ - In debug mode, each instruction executed is detailed in this format:
+   [Executing instruction 0x?? at 0x????????]
+   Argument: 0x????????
+   Accumulator: 0x????????
+ - Values printed are those AFTER execution
