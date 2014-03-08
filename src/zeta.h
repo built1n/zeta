@@ -24,12 +24,13 @@ typedef struct zeta_ctx {
   zeta_regs regs;
   bool done;
   int return_value;
+  bool debug;
 } zeta_ctx;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp);
+  zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp, bool debug);
 void zeta_exec(zeta_ctx*);
 
 #ifdef __cplusplus
