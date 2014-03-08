@@ -16,7 +16,7 @@ int main()
     {
       string line;
       getline(cin, line);
-      if(line.length()%2!=0)
+      if(line.length()%2!=0 and line!="")
 	{
 	  cerr << "Syntax error!" << endl;
 	  return -1;
@@ -59,7 +59,7 @@ int main()
   byte* p=(byte*)malloc(program.size()+2048); // add 2048 byte stack
   for(int i=0;i<program.size();++i)
     p[i]=program[i];
-  zeta_ctx* ctx=zeta_init((byte*)p, program.size()+2048,2048,program.size());
+  zeta_ctx* ctx=zeta_init((byte*)p, program.size()+2048,2048,program.size(), true);
   while(!ctx->done)
     zeta_exec(ctx);
   return ctx->return_value;
