@@ -1,11 +1,13 @@
 // A C++ interface for Zeta
+// rather non-optimal code
 #include <iostream>
 #include <zeta.h>
 #include <string>
 #include <cstdlib>
 #include <vector>
+#include <cctype>
 using namespace std;
-char hex_chars[]="0123456789ABCDEF";
+char hex_chars[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 int main()
 {
   vector<byte> program;
@@ -14,18 +16,45 @@ int main()
     {
       string line;
       getline(cin, line);
-      byte val;
-      for(int i=0;i<16;++i)
+      if(line.length()%2!=0)
 	{
-	  if(line[1]==hex_chars[i])
-	    val=i;
+	  cerr << "Syntax error!" << endl;
+	  return -1;
 	}
-      for(int i=0;i<16;++i)
+      for(int i=0;i<line.length();i+=2)
 	{
-	  if(line[0]==hex_chars[i])
-	    val|=(i<<4);
+	  byte val;
+	  bool good=false;
+	  string oneByte=line.substr(i, i+2);
+	  for(int j=0;j<16;++j)
+	    {
+	      if(toupper(oneByte[0])==hex_chars[j])
+		{
+		  val=j;
+		  good=true;
+		}
+	    }
+	  if(!good)
+	    {
+	      cerr << "Non-hex character found!" << endl;
+	      return -1;
+	    }
+	  good=false;
+	  for(int j=0;j<16;++j)
+	    {
+	      if(toupper(oneByte[1])==hex_chars[j])
+		{
+		  val|=(j<<4);
+		  good=true;
+		}
+	    }
+	  if(!good)
+	    {
+	      cerr << "Non-hex character found!" << endl;
+	      return -1;
+	    }
+	  program.push_back(val);
 	}
-      program.push_back(val);
     }
   byte* p=(byte*)malloc(program.size()+2048); // add 2048 byte stack
   for(int i=0;i<program.size();++i)
