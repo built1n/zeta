@@ -9,6 +9,7 @@
 #include <exec.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 void printBinary(uint32_t n)
 {
   for(int i=0;i<32;++i)
@@ -39,7 +40,7 @@ void stackUnderflow(zeta_ctx* ctx)
 {
   printf("Stack underflow!\n");
 }
-zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp)
+zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp, bool debug)
 {
   zeta_ctx* ctx=malloc(sizeof(zeta_ctx));
   ctx->memory=memory;
@@ -47,9 +48,11 @@ zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp)
   ctx->maxstacksize=maxstacksize;
   ctx->regs.sp=sp;
   ctx->regs.pc=0;
+  srand(time(0));
   ctx->regs.accl=rand(); // give a random seed
   ctx->done=false;
   ctx->return_value=EXIT_SUCCESS;
+  ctx->debug=debug;
   return ctx;
 }
 word getArg (zeta_ctx* ctx)
