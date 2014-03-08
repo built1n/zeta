@@ -1,7 +1,7 @@
 SOURCES=zeta.o exec.o interface.o
 HEADERS=zeta.h util.h
 CFLAGS=-I. -fPIC -g -std=gnu11 -O3 -g
-CXXFLAGS=-I. -fPIC -fpermissive -g
+CXXFLAGS=-I. -fPIC  -g
 zeta: $(SOURCES) $(HEADERS) Makefile
 	gcc $(SOURCES) -o zeta -lstdc++ -g
 all: zeta
