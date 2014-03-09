@@ -5,16 +5,15 @@
 #include <stdio.h>
 static inline void printDebugMessage(zeta_ctx* ctx, byte opcode, word arg)
 {
-  printf("[0x%8X]\n",ctx->regs.pc);
-  printf("Accl: 0x%8X\n", ctx->regs.accl);
-  printf("Opcode: 0x%2X\n", opcode);
+  printf("[0x%08X]\n",ctx->regs.pc);
+  printf("Accl: 0x%08X\n", ctx->regs.accl);
+  printf("Opcode: 0x%02X\n", opcode);
   if(opcode==0x0B)
     {
-      printf("Extended opcode: 0x%2X\n", ((arg&0xFF000000)>>24));
-      printf("Extended argument: 0x%8X\n", getArg(ctx));
+      printf("Extended opcode: 0x%02X\n", ((arg&0xFF000000)>>24));
     }
   else
-    printf("Argument: 0x%8X\n", arg);
+    printf("Argument: 0x%08X\n", arg);
 } 
 static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
@@ -143,7 +142,11 @@ static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 	break;
       }
     case 0x0D:
-      ctx->debug=!(ctx->debug);
+      printf("DBG\n");
+      if(ctx->debug)
+	ctx->debug=false;
+      else
+	ctx->debug=true;
       break;
     default:
       badInstr(ctx);
