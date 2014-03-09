@@ -142,7 +142,6 @@ static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 	break;
       }
     case 0x0D:
-      printf("DBG\n");
       if(ctx->debug)
 	ctx->debug=false;
       else
