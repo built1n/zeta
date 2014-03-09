@@ -22,7 +22,7 @@ void printBinary(uint32_t n)
 }
 void badInstr(zeta_ctx* ctx)
 {
-  printf("Bad instruction at 0x%8X!\n", ctx->regs.pc);
+  printf("Bad instruction at 0x%08X!\n", ctx->regs.pc);
 }
 void badWrite(zeta_ctx* ctx)
 {
@@ -57,7 +57,7 @@ zeta_ctx* zeta_init(byte* memory, word memsize, word maxstacksize, word sp, bool
 }
 word getArg (zeta_ctx* ctx)
 {
-  if(ctx->regs.pc<ctx->memsize-4)
+  if((ctx->regs).pc<(ctx->memsize)-4)
     {
       register word pc = (ctx->regs).pc;
       register word ret = (ctx->memory)[pc + 4];
@@ -71,7 +71,7 @@ word getArg (zeta_ctx* ctx)
 }
 void zeta_exec (zeta_ctx* ctx)
 {
-  if(ctx->regs.pc<ctx->memsize-5)
+  if((ctx->regs).pc<(ctx->memsize)-4)
     {
       byte opcode = ctx->memory[ctx->regs.pc];
       word arg=getArg(ctx);
