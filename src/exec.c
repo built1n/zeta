@@ -222,12 +222,13 @@ void exec_instr(byte opcode, word arg, zeta_ctx* ctx)
 {
   if(!ctx->done)
     {
+      if(exec_table[opcode])
+	exec_table[opcode](arg, ctx);
       if(unlikely(ctx->debug))
 	{
 	  printDebugMessage(ctx, opcode, arg);
 	}
-      if(exec_table[opcode])
-	exec_table[opcode](arg, ctx);
+
     }
   return;
 }
