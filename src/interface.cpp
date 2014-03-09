@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
   vector<byte> prog;
   while(cin.good())
     {
+      printf("0x%08X:", prog.size());
       string line;
       getline(cin, line);
       for(int i=0;i<line.length();i+=2)
@@ -22,20 +23,19 @@ int main(int argc, char* argv[])
 	  byte val=0xFF; 
 	  for(int j=0;j<16;++j)
 	    {
-	      if(line[i+1]==hex_chars[j])
+	      if(toupper(line[i+1])==hex_chars[j])
 		{
 		  val=j;
 		}
 	    }
 	  for(int j=0;j<16;++j)
 	    {
-	      if(line[i]==hex_chars[j])
+	      if(toupper(line[i])==hex_chars[j])
 		{
 		  val|=((j&0xF)<<4);
 		}
 	    }
 	  prog.push_back(val);
-	  printf("Got 0x%02X\n", val);
 	}
     }
   byte* p=(byte*)malloc(prog.size()+2048);
