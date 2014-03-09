@@ -12,12 +12,30 @@ using namespace std;
 char hex_chars[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 int main(int argc, char* argv[])
 {
-  vector<byte> prog;
-  while(cin.good())
+  istream* in=&cin;
+  ifstream ifs;
+  if(argc>=2)
     {
-      printf("0x%08X:", prog.size());
+      ifs.open(argv[1]);
+      // read from file
+      if(ifs.good())
+	in=&ifs;
+      else
+	{
+	  cerr << "Cannot read from file.\n" << endl;
+	  return -1;
+	}
+    }
+  bool interactive=false;
+  if(in==&cin)
+    interactive=true;
+  vector<byte> prog;
+  while(in->good())
+    {
+      if(interactive)
+	printf("0x%08X:", prog.size()); // really shouldn't mix C-style and stream I/O!
       string line;
-      getline(cin, line);
+      getline(*in, line);
       for(int i=0;i<line.length();i+=2)
 	{
 	  byte val=0xFF; 
