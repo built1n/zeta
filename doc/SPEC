@@ -62,3 +62,15 @@ Extended instruction set:
    Argument: 0x????????
    Accumulator: 0x????????
  - Values printed are those AFTER execution
+0x0E - LSR
+ - Load a special register to or from accumulator
+ - Last byte denotes register
+ - First bit denotes to/from
+   - 1 = move to accl.
+   - 0 = move from accl.
+ - 0x00: PC
+ - 0x01: SP
+ - 0x02: MEMSZ
+   - Cannot change
+ - 0x04: STACKSZ
+   - Cannot change
