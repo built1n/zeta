@@ -33,6 +33,7 @@ static inline void printDebugMessage(zeta_ctx* ctx, byte opcode, word arg)
     }
   else
     printf("Argument: 0x%08X\n", arg);
+  printf("Stack pointer: 0x%08X\n", ctx->regs.sp);
 }
 static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
@@ -202,6 +203,7 @@ static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
 		badInstr(ctx);
 	      }
 	  }
+	break;
       }
 	  default:
       badInstr(ctx);
