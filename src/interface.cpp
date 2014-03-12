@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
   while(in->good())
     {
       if(interactive)
-	printf("0x%08X:", prog.size()); // really shouldn't mix C-style and stream I/O!
+	printf("0x%08X:", (word)prog.size()); // really shouldn't mix C-style and stream I/O!
       string line;
       getline(*in, line);
       for(int i=0;i<line.length();i+=2)
@@ -76,6 +76,10 @@ int main(int argc, char* argv[])
   for(int i=0;i<prog.size();++i)
     p[i]=prog[i];
   zeta_ctx* ctx=zeta_init((byte*)p, prog.size(),prog.size(),0, true);
+  if(interactive)
+    {
+      cout << "Beginning execution..." << endl;
+    }
   while(!ctx->done)
     zeta_exec(ctx);
   return ctx->return_value;
