@@ -33,7 +33,7 @@ static inline void printDebugMessage(zeta_ctx* ctx, byte opcode, word arg)
     }
   else
     printf("Argument: 0x%08X\n", arg);
-} 
+}
 static inline void writeWord(zeta_ctx* ctx, word addr, word value)
 {
   if(likely(addr<ctx->memsize-4))
@@ -166,7 +166,44 @@ static inline void exec_extd(zeta_ctx* ctx, byte opcode, word operand)
       else
 	ctx->debug=true;
       break;
-    default:
+    case 0x0E:
+      {
+	register byte flags=(arg&0xFF);
+	if(flags&0x80) // to accl.
+	  {
+	    switch(0x7F&flags)
+	      {
+	      case 0x00:
+		ctx->regs.accl=ctx->regs.pc;
+		break;
+	      case 0x01:
+		ctx->regs.accl=ctx->regs.sp;
+		break;
+	      case 0x02:
+		ctx->regs.accl=ctx->memsize;
+		break;
+	      case 0x04:
+		ctx->regs.accl=ctx->maxstacksize;
+	      default:
+		badInstr(ctx);
+	      }
+	  }
+	else // from accl.
+	  {
+	    switch(0x7F&flags)
+	      {
+	      case 0x00:
+		ctx->regs.pc=ctx->regs.accl;
+		break;
+	      case 0x01:
+		ctx->regs.sp=ctx->regs.accl;
+		break;
+	      default:
+		badInstr(ctx);
+	      }
+	  }
+      }
+	  default:
       badInstr(ctx);
     }
 }
